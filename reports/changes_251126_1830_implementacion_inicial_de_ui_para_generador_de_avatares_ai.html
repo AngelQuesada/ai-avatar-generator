@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informe de Cambios del Proyecto</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f4f7f9;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 10px;
+      margin-top: 30px;
+    }
+    h1 {
+      text-align: center;
+      border-bottom: none;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      background-color: #e8f0f3;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+    pre {
+      background-color: #282c34;
+      color: #abb2bf;
+      padding: 20px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.9em;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    pre code {
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
+      font-size: inherit;
+      color: inherit;
+    }
+    .diff .line {
+      display: block;
+    }
+    .diff .added {
+      background-color: rgba(152, 195, 121, 0.1);
+      color: #98c379;
+    }
+    .diff .removed {
+      background-color: rgba(224, 108, 117, 0.1);
+      color: #e06c75;
+    }
+    .summary {
+      background-color: #e8f5e9;
+      border-left: 5px solid #4CAF50;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    .warning {
+      background-color: #fff3e0;
+      border-left: 5px solid #ff9800;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Informe de Cambios: feat: Implementación inicial de UI para generador de avatares AI</h1>
+    <div class="summary">
+      <p>Se ha añadido la interfaz de usuario básica para el generador de avatares con IA.</p>
+    </div>
+                                                                                                                                                                                                                                                                                        
+    <h2>Detalles del Commit</h2>
+    <ul>
+        <li>Configuración inicial de la página principal (<code>page.tsx</code>) con un componente <code>Dropzone</code> para la carga de imágenes.</li>
+        <li>Creación del componente <code>Dropzone</code> (<code>dropzone.tsx</code>) con manejo de arrastrar y soltar, validación de archivos (tipo, tamaño, resolución) y previsualización de imágenes.</li>
+        <li>Definición de estilos con <code>tailwind-variants</code> para el <code>Dropzone</code> (<code>dropzone-styles.ts</code>).</li>
+        <li>Inclusión de utilidades (<code>utils.ts</code>) para la gestión de clases CSS con <code>clsx</code> y <code>tailwind-merge</code>.</li>
+        <li>Configuración de la integración con la API de Gemini (<code>gemini.ts</code>) para futura comunicación.</li>
+        <li>Definición de tipos y esquemas de validación (<code>definitions.ts</code>) para los estilos de avatares y las solicitudes/respuestas de la API.</li>
+        <li>Actualización de <code>.gitignore</code> para ignorar directorios de reportes y archivos del agente, y <code>.env.example</code> para la clave API.</li>
+        <li>Adición de nuevas dependencias (<code>@google/generative-ai</code>, <code>clsx</code>, <code>tailwind-merge</code>, <code>tailwind-variants</code>) en <code>package.json</code> y <code>pnpm-lock.yaml</code>.</li>
+    </ul>
+
+    <p><strong>Impacto:</strong> Estos cambios sientan las bases para la funcionalidad principal del generador de avatares.</p>
+  </div>
+</body>
+</html>

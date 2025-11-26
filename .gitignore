@@ -34,3 +34,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ignore reports directory contents
+reports/*
+
+# But not the template
+!reports/changes_YYMMDD_HHMM.html
+
+# Ignore agent directory contents
+.agent/*
+
+GEMINI.md

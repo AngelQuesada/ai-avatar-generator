@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informe de Cambios del Proyecto</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f4f7f9;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 10px;
+      margin-top: 30px;
+    }
+    h1 {
+      text-align: center;
+      border-bottom: none;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      background-color: #e8f0f3;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+    pre {
+      background-color: #282c34;
+      color: #abb2bf;
+      padding: 20px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.9em;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    pre code {
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
+      font-size: inherit;
+      color: inherit;
+    }
+    .diff .line {
+      display: block;
+    }
+    .diff .added {
+      background-color: rgba(152, 195, 121, 0.1);
+      color: #98c379;
+    }
+    .diff .removed {
+      background-color: rgba(224, 108, 117, 0.1);
+      color: #e06c75;
+    }
+    .summary {
+      background-color: #e8f5e9;
+      border-left: 5px solid #4CAF50;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    .warning {
+      background-color: #fff3e0;
+      border-left: 5px solid #ff9800;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Informe de Cambios en Staged</h1>
+    <div class="summary">
+      <p>Los cambios actuales en <i>staged</i> representan una <strong>refactorización masiva del entorno de pruebas End-to-End (E2E)</strong> y la transición del proyecto a una estructura de <strong>monorepo</strong> con PNPM Workspaces. El objetivo principal ha sido crear un sistema de testing automatizado, fiable y profesional.</p>
+    </div>
+
+    <h2>1. Configuración del Monorepo (PNPM Workspace)</h2>
+    <p>Se ha establecido una estructura de monorepo para gestionar el <code>frontend</code> y el <code>backend</code> de forma unificada.</p>
+    <ul>
+      <li><strong>Qué se hizo:</strong> Se creó el fichero <code>pnpm-workspace.yaml</code> en la raíz del proyecto.</li>
+      <li><strong>Por qué:</strong> Esto permite a PNPM tratar ambos proyectos como parte de un solo espacio de trabajo. Simplifica la gestión de dependencias, permite ejecutar scripts en ambos proyectos desde la raíz y mejora la coherencia general del desarrollo. El fichero <code>pnpm-lock.yaml</code> ha sido actualizado para reflejar esta nueva estructura.</li>
+    </ul>
+
+    <h2>2. Overhaul del Entorno de Pruebas E2E</h2>
+    <p>El cambio más significativo es la creación de un sistema de E2E robusto que integra el frontend (Playwright) con un backend y una base de datos de prueba reales.</p>
+    
+    <h3>2.1. Cambios en el Backend para Soportar Testing</h3>
+    <ul>
+      <li><strong>Qué se hizo:</strong>
+        <ul>
+          <li>Se añadió un nuevo entorno <code>testing</code> en <code>knexfile.js</code> para configurar una base de datos de prueba.</li>
+          <li>Se crearon nuevos scripts en <code>package.json</code> (ej. <code>start:test</code>, <code>db:reset:test</code>) para iniciar el servidor en modo test y para resetear la base de datos antes de las pruebas.</li>
+          <li>El servidor ahora escribe el puerto que está utilizando en un fichero <code>.port</code>, permitiendo que el entorno de pruebas se comunique con él dinámicamente.</li>
+        </ul>
+      </li>
+      <li><strong>Por qué:</strong> Estos cambios permiten que el entorno de pruebas de Playwright inicie y controle el backend, asegurando que cada ejecución de tests se realice sobre una base de datos limpia, predecible y aislada.</li>
+    </ul>
+
+    <h3>2.2. Cambios en el Frontend (Playwright)</h3>
+    <ul>
+      <li><strong>Qué se hizo:</strong>
+        <ul>
+          <li><strong><code>playwright.global-setup.js</code> (Nuevo):</strong> Un script que se ejecuta una sola vez antes de todos los tests. Su función es invocar el reseteo de la base de datos del backend (<code>pnpm db:reset:test</code>) para garantizar un estado inicial limpio.</li>
+          <li><strong><code>tests/e2e/fixtures/fixtures.js</code> (Nuevo):</strong> Se han creado "fixtures" personalizadas de Playwright. La más importante, <code>testingSponsor</code>, crea datos de prueba únicos para un test y, crucialmente, se encarga de <strong>limpiar esos datos de la base de datos</strong> al finalizar el test, haya pasado o no.</li>
+          <li><strong><code>playwright/api.utils.js</code> (Nuevo):</strong> Utilidades para que las fixtures puedan comunicarse directamente con la API del backend (por ejemplo, para borrar el sponsor de prueba).</li>
+          <li><strong><code>dog-sponsorship.spec.js</code> (Refactorizado):</strong> El fichero de tests principal ha sido reescrito para usar las nuevas fixtures. Esto elimina la creación de datos "al vuelo" con <code>Date.now()</code> y hace los tests mucho más limpios, legibles y fiables.</li>
+          <li><strong><code>example.spec.js</code> (Eliminado):</strong> Se ha borrado el test de ejemplo por defecto de Playwright, ya que no era necesario.</li>
+        </ul>
+      </li>
+      <li><strong>Por qué:</strong> Esta nueva arquitectura de tests es un estándar profesional. Asegura que los tests son <strong>autocontenidos y no dejan basura</strong>, lo que previene que un test afecte al resultado de otro y aumenta drásticamente la fiabilidad de la suite de pruebas.</li>
+    </ul>
+
+    <h2>3. Corrección del Test "Copiar Emails"</h2>
+    <p>Dentro de la gran refactorización, se corrigió el test que fallaba originalmente.</p>
+    <ul>
+        <li><strong>Qué se hizo:</strong> Se ajustó el selector para que siempre elija un perro con padrinos y, más importante, se corrigió el mock de la API del portapapeles en el test (de <code>write</code> a <code>writeText</code>).</li>
+        <li><strong>Por qué:</strong> El mock incorrecto estaba causando un error que impedía la aparición del snackbar de confirmación. La corrección ha solucionado el fallo.</li>
+    </ul>
+    <h4>Diff de la corrección:</h4>
+    <pre class="diff"><code><span class="line removed">-   const dogCard = page.locator('[data-testid="dog-card"]').first();</span><span class="line removed">-   const copyButton = dogCard.locator('[data-testid="copy-emails-button"]');</span><span class="line added">+   // Mock the clipboard API for headless mode</span><span class="line added">+   await page.evaluate(() => {</span><span class="line added">+     const mockClipboard = {</span><span class="line added">+       writeText: () => Promise.resolve(),</span><span class="line added">+     };</span><span class="line added">+     /* ... */</span><span class="line added">+   });</span><span class="line added">+</span><span class="line added">+   const copyButton = page.locator('[data-testid="copy-emails-button"]:not([disabled])').first();</span></code></pre>
+    
+    <h2>4. Actualización de Directivas (`GEMINI.md`)</h2>
+    <ul>
+      <li><strong>Qué se hizo:</strong> Se añadieron nuevas instrucciones al fichero <code>GEMINI.md</code> para requerir explicaciones más detalladas sobre el "qué", "porqué" y "cómo" de los cambios, y para recordar el entorno de trabajo (Windows 11, VSCode).</li>
+      <li><strong>Por qué:</strong> Para mejorar la calidad de las explicaciones y el contexto de las acciones realizadas por la IA.</li>
+    </ul>
+
+  </div>
+</body>
+</html>

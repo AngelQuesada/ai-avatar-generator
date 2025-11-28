@@ -1,11 +1,12 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
-const API_KEY: string | undefined = process.env.GEMINI_API_KEY;
+const API_KEY = process.env.GEMINI_API_KEY;
 
 if (!API_KEY) {
-  throw new Error("No se ha encontrado ninguna API key");
+  throw new Error("No API key found in environment variables");
 }
 
-const genAI: GoogleGenerativeAI = new GoogleGenerativeAI(API_KEY);
+// Inicialización del cliente unificado
+const ai = new GoogleGenAI({ apiKey: API_KEY });
 
-export default genAI;
+export default ai;

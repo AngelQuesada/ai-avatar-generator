@@ -35,13 +35,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Ignore reports directory contents
+# Folders
 reports/*
-
-# But not the template
 !reports/changes_YYMMDD_HHMM.html
+.vscode/*
 
-# Ignore agent directory contents
-.agent/*
+# Files
 
 GEMINI.md
+cspell.json
